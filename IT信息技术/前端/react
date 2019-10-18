@@ -1,0 +1,86 @@
+2019-7-31  起始
+props：表示组件接受的参数
+render：渲染方法
+state:状态
+constructor：构造函数，必须存在props和super(props);
+{}中写的时JS代码
+
+const element = (
+  <h1 className="greeting">
+    Hello, world!
+  </h1>
+);
+与
+const element = React.createElement(
+  'h1',
+  {className: 'greeting'},
+  'Hello, world!'
+);
+完全等效
+
+React 元素是不可变对象。一旦被创建，你就无法更改它的子元素或者属性。
+一个元素就像电影的单帧：它代表了某个特定时刻的 UI。
+React只进行部分更新
+
+
+函数组件
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+该函数是一个有效的 React 组件，因为它接收唯一带有数据的 “props”（代表属性）对象与并返回一个 React 元素。这类组件被称为“函数组件”，因为它本质上就是 JavaScript 函数。
+
+class组件
+class Welcome extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}</h1>;
+  }
+}
+
+state&生命周期
+当组件第一次被渲染到 DOM 中的时候，就为其设置一个计时器。这在 React 中被称为“挂载（mount）”。
+当 DOM 中组件被删除的时候，应该清除计时器。这在 React 中被称为“卸载（unmount）”。
+
+state只能用setState函数更新，直接赋值不会更新组件
+
+this.props和this.state是异步的，不要相互依赖
+解决办法：state传入函数值
+如
+
+this.setState((state, props) => ({
+  counter: state.counter + props.increment
+}));
+
+组件可以选择把它的 state 作为 props 向下传递到它的子组件中：
+<h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+
+在 React 中另一个不同点是你不能通过返回 false 的方式阻止默认行为。你必须显式的使用 preventDefault 
+
+在 JavaScript 中，class 的方法默认不会绑定 this。如果你忘记绑定 this.handleClick 并把它传入了 onClick，当你调用这个函数的时候 this 的值为 undefined。通常情况下，如果你没有在方法后面添加 ()，例如 onClick={this.handleClick}，你应该为这个方法绑定 this。
+
+// 为了在回调中使用 `this`，这个绑定是必不可少的
+this.handleClick = this.handleClick.bind(this);
+
+实验性的 public class fields 语法
+handleClick = () => {
+    console.log('this is:', this);
+  }
+
+如果你没有使用 class fields 语法，你可以在回调中使用箭头函数：
+ render() {
+    // 此语法确保 `handleClick` 内的 `this` 已被绑定。
+    return (
+      <button onClick={(e) => this.handleClick(e)}>
+        Click me
+      </button>
+    );
+  }
+
+如果该回调函数作为 prop 传入子组件时，这些组件可能会进行额外的重新渲染。！！！降低效能！！！
+React 的事件对象 e 会被作为第二个参数传递。如果通过箭头函数的方式，事件对象必须显式的进行传递，而通过 bind 的方式，事件对象以及更多的参数将会被隐式的进行传递。
+
+
+
+2019-8-1
+学习route用法
+学习ant-ui
+学习redux

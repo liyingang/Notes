@@ -1,0 +1,7 @@
+防火墙问题：
+	开放端口： firewall-cmd --permanent --add-port=8080/tcp
+	重启配置：firewall-cmd --reload
+	查看端口；firewall-cmd --permanent --list-all-zones
+
+
+	ps -ef | grep 
