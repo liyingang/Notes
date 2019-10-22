@@ -1,57 +1,73 @@
 # mysql8.0之前版本 (5.7)
 
-	配置文件：在c：//programData下mysql文件下的my.ini
-	启动/停止方式：net start/stop mysql***
-	登陆方式：
-		msyql [-h*** -P***] -u*** -p(回车看不到密码)***  其中h为ip地址，P为端口号，u为用户名，p为密码
-		h P u和值之间可以有空格，但p和密码之间不能有空格
-	退出：
-		exit或quit
-	
-	public setting：
-		let who='username'@'hostname'
-	
-	驱动：
-		com.mysql.jdbc.driver
-	
-	用户管理：
-		添加用户：
-			create user who identified by 'password'
-		删除用户：
-			drop user who
-		修改密码：
-			update user set password = password('newpass') where user='username'
-			set password for who = password('newpass')
-	 	
-	权限：
-		查询权限：
-			show grant for who
-		添加权限：
-			grant authorities on databasename.tablename to who
-			获取root权限：
-				grant all on '.' to who
+**配置文件：**在c：//programData下mysql文件下的my.ini
+
+**启动/停止方式：**net start/stop mysql\*\*\*
+
+**登陆方式：**
+
+​	msyql [-h\*\*\* -P\*\*\*] -u\*\*\* -p(回车看不到密码)\*\*\*  其中h为ip地址，P为端口号，u为用户名，p为密码
+​	h P u和值之间可以有空格，但p和密码之间不能有空格  
+
+**退出：**
+
+​	exit或quit
+
+**public setting：**
+
+​	let who='username'@'hostname'
+
+**驱动：**
+
+​	com.mysql.jdbc.driver
+
+**用户管理：**
+
+​	**添加用户：**
+
+​		create user who identified by 'password'
+
+​	**删除用户：**
+
+​		drop user who
+
+​	**修改密码：**
+
+​		update user set password = password('newpass') where user='username'
+
+​		set password for who = password('newpass')
+ 	
+
+**权限：**
+
+**查询权限：**
+
+​		show grant for who
+
+**添加权限：**
+
+​		grant authorities on databasename.tablename to who
+
+**获取root权限：**
+
+​		grant all on '.' to who
 
 # 设置mysql远程连接：
 
 + 修改配置文件：
-	vi /etc/mysql/mysql.conf.d/mysqld.cnf
+		vi /etc/mysql/mysql.conf.d/mysqld.cnf
 + 注释bind-address
 + 重启mysql：service mysql restart
 
 
 
-```
+
 忘记了root密码怎么办？
-	
-	1. open cmd as Admin run 'net stop mysql'
-	2. use none identified way to start mysql with 'mysql --skip-grant-tables'
-	3. open new cmd run 'mysql' and you will log in it
-	4. change your password as followed:
-		1).use mysql;
-		2).update user set password = passwoed('newpass') where user='root'
-	5. close all cmd and stop mysqld server and restart mysql server 'net start mysql'
-```
+1. open cmd as Admin run 'net stop mysql'
+2. use none identified way to start mysql with 'mysql --skip-grant-tables'
+3. open new cmd run 'mysql' and you will log in it
+4. change your password as followed:
+	1. use mysql;
+	2. update user set password = passwoed('newpass') where user='root'
+5. close all cmd and stop mysqld server and restart mysql server 'net start mysql'
 
-```
-
-```
