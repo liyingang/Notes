@@ -10,7 +10,7 @@
 
     +   使同一个Pod里面的多个容器共享存储、网络、PID、IPC等
 
-##1 Pod定义
+## 1 Pod定义
 
 下面是Pod的资源清单：
 
@@ -163,7 +163,7 @@ FIELDS:
 -   restartPolicy 重启策略，表示Pod在遇到故障的时候的处理策略
 
 
-##2 Pod配置
+## 2 Pod配置
 
 本小节主要来研究`pod.spec.containers`属性，这也是pod配置中最为关键的一项配置。
 
@@ -220,7 +220,7 @@ pod-base   1/2     Running   4          95s
 [root@k8s-master01 pod]# kubectl describe pod pod-base -n dev
 ```
 
-###2.2 镜像拉取
+### 2.2 镜像拉取
 
 创建pod-imagepullpolicy.yaml文件，内容如下：
 
@@ -340,7 +340,7 @@ pod-command   2/2     Runing   0          2s
 >    3.  `如果command没写，但args写了，那么Dockerfile中配置的ENTRYPOINT的命令会被执行，使用当前args的参数`
 >    4.  `如果command和args都写了，那么Dockerfile的配置被忽略，执行command并追加上args参数`
 
-###2.4 环境变量
+### 2.4 环境变量
 
 创建pod-env.yaml文件，内容如下：
 
@@ -375,7 +375,7 @@ admin
 
 这种方式不是很推荐，推荐将这些配置单独存储在配置文件中，这种方式将在后面介绍。
 
-###2.5 端口设置
+### 2.5 端口设置
 
 本小节来介绍容器的端口设置，也就是containers的ports选项。
 
@@ -435,7 +435,7 @@ spec:
 
 访问容器中的程序需要使用的是`Podip:containerPort`
 
-###2.6 资源配额
+### 2.6 资源配额
 
 容器中的程序要运行，肯定是要占用一定资源的，比如cpu和内存等，如果不对某个容器的资源做限制，那么它就可能吃掉大量资源，导致其它容器无法运行。针对这种情况，kubernetes提供了对内存和cpu的资源进行配额的机制，这种机制主要通过resources选项实现，他有两个子选项：
 
@@ -502,7 +502,7 @@ pod-resources   0/1     Pending   0          20s
 Warning  FailedScheduling  35s   default-scheduler  0/3 nodes are available: 1 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn't tolerate, 2 Insufficient memory.(内存不足)
 ```
 
-##3 Pod生命周期
+## 3 Pod生命周期
 
 我们一般将pod对象从创建至终的这段时间范围称为pod的生命周期，它主要包含下面的过程：
 
@@ -530,7 +530,7 @@ Warning  FailedScheduling  35s   default-scheduler  0/3 nodes are available: 1 n
 -   未知（Unknown）：apiserver无法正常获取到pod对象的状态信息，通常由网络通信失败所导致
 
 
-###3.1  创建和终止
+### 3.1  创建和终止
 
 **pod的创建过程**
 
@@ -729,7 +729,7 @@ pod-hook-exec  1/1     Running    0          29s    10.244.2.48   node2
 postStart...
 ```
 
-###3.4 容器探测
+### 3.4 容器探测
 
 容器探测用于检测容器中的应用实例是否正常工作，是保障业务可用性的一种传统机制。如果经过探测，实例的状态不符合预期，那么kubernetes就会把该问题实例" 摘除 "，不承担业务流量。kubernetes提供了三种探针来实现容器探测，分别是：
 
@@ -952,7 +952,7 @@ spec:
       timeoutSeconds: 5 # 探测超时时间为5s
 ```
 
-###3.5 重启策略
+### 3.5 重启策略
 
 在上一节中，一旦容器探测出现了问题，kubernetes就会对容器所在的Pod进行重启，其实这是由pod的重启策略决定的，pod的重启策略有 3 种，分别如下：
 
@@ -1002,7 +1002,7 @@ NAME                   READY   STATUS    RESTARTS   AGE
 pod-restartpolicy      0/1     Running   0          5min42s
 ```
 
-##4 Pod调度
+## 4 Pod调度
 
 在默认情况下，一个Pod在哪个Node节点上运行，是由Scheduler组件采用相应的算法计算出来的，这个过程是不受人工控制的。但是在实际使用中，这并不满足的需求，因为很多情况下，我们想控制某些Pod到达某些节点上，那么应该怎么做呢？这就要求了解kubernetes对Pod的调度规则，kubernetes提供了四大类调度方式：
 
@@ -1011,7 +1011,7 @@ pod-restartpolicy      0/1     Running   0          5min42s
 -   亲和性调度：NodeAffinity、PodAffinity、PodAntiAffinity
 -   污点（容忍）调度：Taints、Toleration
 
-###4.1 定向调度
+### 4.1 定向调度
 
 定向调度，指的是利用在pod上声明nodeName或者nodeSelector，以此将Pod调度到期望的node节点上。注意，这里的调度是强制的，这就意味着即使要调度的目标Node不存在，也会向上面进行调度，只不过pod运行失败而已。
 
@@ -1119,7 +1119,7 @@ Events:
   Warning  FailedScheduling  <unknown>  default-scheduler  0/3 nodes are available: 3 node(s) didn't match node selector.
 ```
 
-###4.2 亲和性调度
+### 4.2 亲和性调度
 
 上一节，介绍了两种定向调度的方式，使用起来非常方便，但是也有一定的问题，那就是如果没有满足条件的Node，那么Pod将不会被运行，即使在集群中还有可用Node列表也不行，这就限制了它的使用场景。
 
@@ -1450,7 +1450,7 @@ NAME                           READY   STATUS    RESTARTS   AGE   IP            
 pod-podantiaffinity-required   1/1     Running   0          30s   10.244.1.96   node2  ..
 ```
 
-###4.3 污点和容忍
+### 4.3 污点和容忍
 
 **污点（Taints）**
 

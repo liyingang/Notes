@@ -39,9 +39,9 @@ kubectl apply -f nginx-pod.yaml
 | 命令式对象配置 | 文件     | 开发     | 可以审计、跟踪 | 项目大时，配置文件多，操作麻烦   |
 | 声明式对象配置 | 目录     | 开发     | 支持目录操作   | 意外情况下难以调试               |
 
-####1.1.1 命令式对象管理
+#### 1.1.1 命令式对象管理
 
-#####**kubectl命令**
+##### **kubectl命令**
 
 kubectl是kubernetes集群的命令行工具，通过它能够对集群本身进行管理，并能够在集群上进行容器化应用的安装部署。kubectl命令的语法如下：
 
@@ -65,7 +65,7 @@ kubectl get pod pod_name
 kubectl get pod pod_name -o yaml
 ```
 
-#####**资源类型**
+##### **资源类型**
 
 kubernetes中所有的内容都抽象为资源，可以通过下面的命令进行查看:
 
@@ -96,7 +96,7 @@ kubectl api-resources
 | 配置资源      | configmaps               | cm     | 配置            |
 |               | secrets                  |        | 配置            |
 
-#####**操作**
+##### **操作**
 
 kubernetes允许对资源进行多种操作，可以通过–help查看详细的操作命令
 
@@ -731,7 +731,7 @@ Service可以看作是一组同类Pod对外的访问接口。借助Service，应
 
 ![在这里插入图片描述](Kubernetes使用/8833c561b4f547a78f012799dc520b5a.png)
 
-####5.1 创建集群内部可访问的Service
+#### 5.1 创建集群内部可访问的Service
 
 ```sh
 # 暴露Service
