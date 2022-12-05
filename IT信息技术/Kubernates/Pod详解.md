@@ -120,6 +120,41 @@ FIELDS:
    spec <Object>
    status       <Object>
 
+master01@master01:~$ kubectl explain pod
+KIND:     Pod
+VERSION:  v1
+
+DESCRIPTION:
+     Pod is a collection of containers that can run on a host. This resource is
+     created by clients and scheduled onto hosts.
+
+FIELDS:
+   apiVersion	<string>
+     APIVersion defines the versioned schema of this representation of an
+     object. Servers should convert recognized schemas to the latest internal
+     value, and may reject unrecognized values. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+
+   kind	<string>
+     Kind is a string value representing the REST resource this object
+     represents. Servers may infer this from the endpoint the client submits
+     requests to. Cannot be updated. In CamelCase. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+
+   metadata	<Object>
+     Standard object's metadata. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+
+   spec	<Object>
+     Specification of the desired behavior of the pod. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+
+   status	<Object>
+     Most recently observed status of the pod. This data may not be up to date.
+     Populated by the system. Read-only. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+
+
 [root@k8s-master01 ~]# kubectl explain pod.metadata
 KIND:     Pod
 VERSION:  v1
@@ -133,13 +168,60 @@ FIELDS:
    finalizers   <[]string>
    generateName <string>
 ......
+
+master01@master01:~$ kubectl explain pod.metadata
+KIND:     Pod
+VERSION:  v1
+
+RESOURCE: metadata <Object>
+
+DESCRIPTION:
+     Standard object's metadata. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+
+     ObjectMeta is metadata that all persisted resources must have, which
+     includes all objects users must create.
+
+FIELDS:
+   annotations	<map[string]string>
+     ...
+   clusterName	<string>
+     ...
+   creationTimestamp	<string>
+     ...
+   deletionGracePeriodSeconds	<integer>
+     ...
+   deletionTimestamp	<string>
+     ...
+   finalizers	<[]string>
+     ...
+   generateName	<string>
+     ...
+   generation	<integer>
+     ...
+   labels	<map[string]string>
+    ...
+   managedFields	<[]Object>
+    ...
+   name	<string>
+     ...
+   namespace	<string>
+     ...
+   ownerReferences	<[]Object>
+    ...
+   resourceVersion	<string>
+     ...
+   selfLink	<string>
+     ...
+   uid	<string>
+     ...
 ```
 
 在kubernetes中基本所有资源的一级属性都是一样的，主要包含5部分：
 
--   apiVersion 版本，由kubernetes内部定义，版本号必须可以用 kubectl api-versions 查询到
+-   apiVersion 版本，由kubernetes内部定义，版本号必须可以用 kubectl api-versions 查询到,见附录
 
--   kind 类型，由kubernetes内部定义，版本号必须可以用 kubectl api-resources 查询到
+-   kind 类型，由kubernetes内部定义，版本号必须可以用 kubectl api-resources 查询到，见附录
 
 -   metadata 元数据，主要是资源标识和说明，常用的有name、namespace、labels等
 
@@ -183,7 +265,7 @@ FIELDS:
    resources <Object>      # 资源限制和资源请求的设置
 ```
 
-###2.1 基本配置
+### 2.1 基本配置
 
 创建pod-base.yaml文件，内容如下：
 
@@ -215,9 +297,93 @@ pod/pod-base created
 NAME       READY   STATUS    RESTARTS   AGE
 pod-base   1/2     Running   4          95s
 
+master01@master01:~$ kubectl get pod -n dev
+NAME       READY   STATUS             RESTARTS      AGE
+pod-base   1/2     CrashLoopBackOff   3 (53s ago)   2m27s
+
+
 # 可以通过describe查看内部的详情
 # 此时已经运行起来了一个基本的Pod，虽然它暂时有问题
 [root@k8s-master01 pod]# kubectl describe pod pod-base -n dev
+
+master01@master01:~$ kubectl describe pod pod-base -n dev
+Name:         pod-base
+Namespace:    dev
+Priority:     0
+Node:         node01/192.168.66.4
+Start Time:   Mon, 05 Dec 2022 14:36:22 +0000
+Labels:       user=heima
+Annotations:  cni.projectcalico.org/containerID: 43e8a08f80988a20a4015e33f855487c34cc027f0f9b3f29d3996d832613f52a
+              cni.projectcalico.org/podIP: 10.244.196.129/32
+              cni.projectcalico.org/podIPs: 10.244.196.129/32
+Status:       Running
+IP:           10.244.196.129
+IPs:
+  IP:  10.244.196.129
+Containers:
+  nginx:
+    Container ID:   docker://1822dbc4873f90f2b57bdbba33a607ee6f5f5dc366819edb8c7bf657da54a23f
+    Image:          nginx:1.17.1
+    Image ID:       docker-pullable://nginx@sha256:b4b9b3eee194703fc2fa8afa5b7510c77ae70cfba567af1376a573a967c03dbb
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Mon, 05 Dec 2022 14:36:52 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-x95r9 (ro)
+  busybox:
+    Container ID:   docker://80385b3afebbd330e9bc27f1fa6631c86c3394f9f4b729cec0d7a15b36f47692
+    Image:          busybox:1.30
+    Image ID:       docker-pullable://busybox@sha256:4b6ad3a68d34da29bf7c8ccb5d355ba8b4babcad1f99798204e7abb43e54ee3d
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Mon, 05 Dec 2022 14:37:17 +0000
+      Finished:     Mon, 05 Dec 2022 14:37:17 +0000
+    Ready:          False
+    Restart Count:  1
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-x95r9 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-x95r9:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age              From               Message
+  ----     ------     ----             ----               -------
+  Normal   Scheduled  62s              default-scheduler  Successfully assigned dev/pod-base to node01
+  Normal   Pulling    61s              kubelet            Pulling image "nginx:1.17.1"
+  Normal   Pulled     32s              kubelet            Successfully pulled image "nginx:1.17.1" in 29.166659803s
+  Normal   Created    32s              kubelet            Created container nginx
+  Normal   Started    32s              kubelet            Started container nginx
+  Normal   Pulling    32s              kubelet            Pulling image "busybox:1.30"
+  Normal   Pulled     8s               kubelet            Successfully pulled image "busybox:1.30" in 23.620596974s
+  Normal   Created    7s (x2 over 8s)  kubelet            Created container busybox
+  Normal   Started    7s (x2 over 8s)  kubelet            Started container busybox
+  Normal   Pulled     7s               kubelet            Container image "busybox:1.30" already present on machine
+  Warning  BackOff    5s (x2 over 6s)  kubelet            Back-off restarting failed container
+
 ```
 
 ### 2.2 镜像拉取
@@ -273,9 +439,16 @@ Events:
   Normal   Pulled     7s (x3 over 25s)  kubelet, node1     Container image "busybox:1.30" already present on machine
   Normal   Created    7s (x3 over 25s)  kubelet, node1     Created container busybox
   Normal   Started    7s (x3 over 25s)  kubelet, node1     Started container busybox
+
+master01@master01:~$ kubectl get pod -n dev
+NAME                  READY   STATUS             RESTARTS        AGE
+pod-base              1/2     CrashLoopBackOff   7 (4m11s ago)   16m
+pod-imagepullpolicy   1/2     CrashLoopBackOff   6 (64s ago)     6m45s
+
+
 ```
 
-###2.3 启动命令
+### 2.3 启动命令
 
 在前面的案例中，一直有一个问题没有解决，就是的busybox容器一直没有成功运行，那么到底是什么原因导致这个容器的故障呢？
 
@@ -298,8 +471,14 @@ spec:
     command: ["/bin/sh","-c","touch /tmp/hello.txt;while true;do /bin/echo $(date +%T) >> /tmp/hello.txt; sleep 3; done;"]
 ```
 
-![在这里插入图片描述](Kubernetes使用/f06a0e6bcf7c4823bbb3e7b90c2c65f7.png)
+```shell
+master01@master01:~$ kubectl get pod -n dev
+NAME                  READY   STATUS             RESTARTS        AGE
+pod-base              1/2     CrashLoopBackOff   7 (4m11s ago)   16m
+pod-command           2/2     Running            0               9m40s
+pod-imagepullpolicy   1/2     CrashLoopBackOff   6 (64s ago)     6m45s
 
+```
 command，用于在pod中的容器初始化完毕之后运行一个命令。
 
 >   稍微解释下上面命令的意思：
@@ -321,15 +500,23 @@ pod/pod-command created
 NAME          READY   STATUS   RESTARTS   AGE
 pod-command   2/2     Runing   0          2s
 
+
 # 进入pod中的busybox容器，查看文件内容
 # 补充一个命令: kubectl exec  pod名称 -n 命名空间 -it -c 容器名称 /bin/sh  在容器内部执行命令
 # 使用这个命令就可以进入某个容器的内部，然后进行相关操作了
 # 比如，可以查看txt文件的内容
-[root@k8s-master01 pod]# kubectl exec pod-command -n dev -it -c busybox /bin/sh
-/ # tail -f /tmp/hello.txt
-14:44:19
-14:44:22
-14:44:25
+master01@master01:~$ kubectl exec pod-command -n dev -it -c busybox /bin/sh
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+/ # tail -f /tmp/hello.txt 
+14:55:14
+14:55:17
+14:55:20
+14:55:47
+14:55:50
+^C
+/ # exit
+command terminated with exit code 130
+
 ```
 
 >   特别说明：
@@ -366,11 +553,14 @@ spec:
 pod/pod-env created
 
 # 进入容器，输出环境变量
-[root@k8s-master01 ~]# kubectl exec pod-env -n dev -c busybox -it /bin/sh
+master01@master01:~$ kubectl exec pod-env -n dev -it -c busybox /bin/sh
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
 / # echo $username
 admin
 / # echo $password
 123456
+/ # exit
+
 ```
 
 这种方式不是很推荐，推荐将这些配置单独存储在配置文件中，这种方式将在后面介绍。
@@ -392,6 +582,44 @@ FIELDS:
    hostPort     <integer> # 容器要在主机上公开的端口，如果设置，主机上只能运行容器的一个副本(一般省略) 
    hostIP       <string>  # 要将外部端口绑定到的主机IP(一般省略)
    protocol     <string>  # 端口协议。必须是UDP、TCP或SCTP。默认为“TCP”。
+
+master01@master01:~$ kubectl explain pod.spec.containers.ports
+KIND:     Pod
+VERSION:  v1
+
+RESOURCE: ports <[]Object>
+
+DESCRIPTION:
+     List of ports to expose from the container. Exposing a port here gives the
+     system additional information about the network connections a container
+     uses, but is primarily informational. Not specifying a port here DOES NOT
+     prevent that port from being exposed. Any port which is listening on the
+     default "0.0.0.0" address inside a container will be accessible from the
+     network. Cannot be updated.
+
+     ContainerPort represents a network port in a single container.
+
+FIELDS:
+   containerPort	<integer> -required-
+     Number of port to expose on the pod's IP address. This must be a valid port
+     number, 0 < x < 65536.
+
+   hostIP	<string>
+     What host IP to bind the external port to.
+
+   hostPort	<integer>
+     Number of port to expose on the host. If specified, this must be a valid
+     port number, 0 < x < 65536. If HostNetwork is specified, this must match
+     ContainerPort. Most containers do not need this.
+
+   name	<string>
+     If specified, this must be an IANA_SVC_NAME and unique within the pod. Each
+     named port in a pod must have a unique name. Name for the port that can be
+     referred to by services.
+
+   protocol	<string>
+     Protocol for port. Must be UDP, TCP, or SCTP. Defaults to "TCP".
+
 ```
 
 接下来，编写一个测试案例，创建pod-ports.yaml
@@ -430,10 +658,50 @@ spec:
     - containerPort: 80
       name: nginx-port
       protocol: TCP
+      ...
+  hostIP: 192.168.66.4
+  phase: Running
+  podIP: 10.244.196.131
+  podIPs:
+  - ip: 10.244.196.131
+  qosClass: BestEffort
+  startTime: "2022-12-05T15:05:13Z"
+
 ......
 ```
 
 访问容器中的程序需要使用的是`Podip:containerPort`
+```yaml
+
+master01@master01:~$ curl 10.244.196.131:80
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+
+```
+
 
 ### 2.6 资源配额
 
@@ -567,7 +835,7 @@ Warning  FailedScheduling  35s   default-scheduler  0/3 nodes are available: 1 n
 9.  kubelet请求apiServer将此pod资源的宽限期设置为0从而完成删除操作，此时pod对于用户已不可见
 
 
-###3.2 初始化容器
+### 3.2 初始化容器
 
 初始化容器是在pod的主容器启动之前要运行的容器，主要是做一些主容器的前置工作，它具有两大特征：
 
@@ -641,7 +909,7 @@ pod-initcontainer                1/1     Running           0          90s
 [root@k8s-master01 ~]# ifconfig ens33:2 192.168.90.15 netmask 255.255.255.0 up
 ```
 
-###3.3 钩子函数
+### 3.3 钩子函数
 
 钩子函数能够感知自身生命周期中的事件，并在相应的时刻到来时运行用户指定的程序代码。
 
