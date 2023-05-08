@@ -2214,7 +2214,7 @@ kubectl -h 查看子命令列表
 
 
 
-#十一 、k8s 组件调用流程
+# 十一 、k8s 组件调用流程
 
 ![img](Kubernetes/37d12f2eb9389b50f7d5de1dce8b93d4e6116e9a.png)
 
