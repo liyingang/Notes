@@ -1,0 +1,408 @@
+1.	注释
+1.1.	/* xxxxx*/
+2.	样式表引入
+2.1.	行内式（内联样式）
+<标签名 style="属性1：值；属性2：值；...">内容</...>
+2.2.	内部样式表
+·
+<style>选择器{属性1：值；属性2：值；...}</style>
+2.3.	外部样式表（外链式）
+嵌套在head中
+<link href="xxx" type="textcss" rel="stylesheet" />
+2.4.	（不常用）
+<style> @import  url("xxx") </style>
+3.	样式规则
+3.1.	选择器 {声明（属性：值）；
+            声明（属性：值）;
+            声明（属性：值）
+}
+3.2.	CSS选择器
+基本选择器
+标签选择器
+可以选择某一类标签 比如 所有的div 标签
+div  span   table  input
+类选择器
+可以选择一个或者多个标签
+.nav  
+类名命名 
+1. 不能纯数字
+2. 不能数字开头
+3. 尽量英文字母 + 数字
+4. .div  .p  .table 错误的  不能以标签命名
+自己起的名字
+多类名选择器
+注意影响样式只和类定义先后有关，和引用顺序无关
+class=“类名1 类名2...”
+ID 选择器
+#   定义  id 调用
+id选择器和class选择器 区别
+使用次数上
+class  多次重复使用  （最常用）
+id 只能使用一次
+通配符选择器
+* 所有标签都会选择  实际开发的时候使用较少
+复合选择器
+后代选择器
+ 
+用空格隔开  选取子孙后代的
+子代选择器
+用 > 隔开  选取 亲儿子
+交集选择器
+标签连写  div.one
+div#two
+并集选择器
+ 
+用 逗号隔开   集体声明  相同样式的时候
+div, p ,span, .current { color: red;}
+相邻兄弟选择器
+选择下一个兄弟
+.one+div
+没啥鸟用
+通用兄弟选择器
+选择所有兄弟
+.active~p
+没啥鸟用
+伪类选择器
+链接伪类选择器
+：
+a：link
+未访问时链接
+a：visited
+已访问链接
+a:hover
+鼠标移动到链接上
+a:active
+选定时链接
+注意书写时顺序不能颠倒
+a{}   a:hover {}
+ 
+开发中一般用格式
+例如：
+a{
+    color:#333;
+    text-decoration:none;
+    font-size:25px;
+    font-weight:700;
+}
+a:hover{
+    color:#f10215;
+}
+结构伪类选择器
+ul ：first-child
+ul :nth-child(n)
+选择ul的第n个子元素
+ul ：last-child
+p:nth-child(1)
+选择父元素的第一个p子元素
+p :nth-of-type(n)
+选择父元素第n个类型为p的元素
+属性选择器
+[title]
+包含标题（title）的所有元素
+[title=runoob]
+改变了标题title='runoob'元素
+[title~=hello]
+属性中包含独立的单词为 value
+[lang|=en]
+属性中必须是完整且唯一的单词，或者以 - 分隔开
+[class^=links]
+以links开头
+[class$=links]
+以links结尾的
+[title*=flower]
+字符串拆分，只要能拆出来 value 这个词就行
+4.	CSS 三大特性
+4.1.	层叠性
+如果权重相同的情况下
+就近原则
+离着这个标签最近的那个样式
+4.2.	继承性
+如果子级没有指定样式，则会继承父级的样式
+不是所有样式都会继承 一般继承  文字类  text-  font  -line
+4.3.	优先级
+选择器不同 优先执行的顺序不一样
+* 和 继承    0 0 0 0
+标签选择器  0001
+类 和  伪类   0010
+id 选择器  0100
+行内样式表  1000
+！important   ∞
+5.	标签显示模式
+ 
+5.1.	行内元素
+没有宽度和高度
+一行可以放多个
+inline
+5.2.	块级元素
+有高度和宽度
+一行只能放一个
+霸道
+block
+5.3.	行内块元素
+有宽度和高度
+一行可以放多个
+inline-block
+5.4.	转换
+display
+5.5.	注意点
+1. 行内元素  行内块元素  我们可以看做文本
+2. 行高等于盒子的高度，可以让 单行文本垂直居中
+p中不能包含div
+a中不包含a
+a中可以放块级元素
+6.	字体样式
+6.1.	font-size 
+字体大小
+别忘了加单位 px
+单位
+相对长度
+px
+像素
+em
+当前对象内文本的字体尺寸
+绝对长度
+in
+英寸
+cm
+厘米
+mm
+毫米
+pt
+点
+6.2.	font-family
+字体
+6.3.	font-weight
+字体加粗
+normal  正常的  ==  400
+bold  加粗的  == 700
+6.4.	font-style
+字体样式倾斜
+normal   正常
+italic  倾斜的
+6.5.	综合连写
+有顺序关系 不能调动  必须有 font-size 和 font-family
+选择器{font: font-style  font-weight  font-size/line-height  font-family;}
+7.	文本格式化标签样式
+7.1.	em  和 i  倾斜
+取消倾斜
+font-style：normal
+添加倾斜
+font-style：italic
+7.2.	strong  和 b
+取消加粗
+font-weight: normal   400
+添加加粗
+font-weight: bold  700
+7.3.	u  ins
+删除下划线
+text-decoration:none;
+添加下划线
+text-decoration:underline;
+7.4.	s 和 del
+删除删除线
+text-decoration:none;
+添加删除线
+text-decoration:line-through
+8.	显示与隐藏
+8.1.	display
+ 
+none   无  隐藏元素
+block  显示元素  转换为块级元素
+8.2.	visibility
+visible  显示
+hidden   隐藏
+8.3.	dis 和vis  区别  display 不占位置  visibility占位置
+8.4.	overflow 
+hidden
+溢出的部分隐藏掉
+visible  显示
+auto   自动  超出就显示滚动条 不超出不显示滚动条
+scroll
+总是显示滚动条
+9.	简便操作
+9.1.	tab键
+！+t
+html+t
+div*10+t
+div>p+t
+div+p+t
+.xxx+t
+10.	定位
+10.1.	定位模式
+静态定位  static
+相对定位 relative
+保留位置
+停职留薪
+脱标
+浮动再其他标准流元素的上方
+以自己原来位置的左上角
+绝对定位 absolute
+不保留位置
+完全脱标
+没有父级或者父级没有定位
+以浏览器当前窗口为准
+如果父级有定位  则以父级的左上角对齐
+固定定位 fixed
+
+不保留位置
+完全脱标
+固定定位总是以浏览器为准
+10.2.	边偏移
+top
+left
+right
+bottom
+11.	浮动
+11.1.	就是为了让多个块级元素一行显示 （布局用）
+11.2.	标准流
+正常显示的方式  块级一行显示一个  行内元素一行显示多个
+11.3.	浮动 是 脱标的 
+1. 浮动再父盒子里面 是不会超过内边距和边框的范围
+2. 如果子盒子有一个浮动了，其余的子盒子都应该浮动
+3. 默认的隐式转换 行内块元素
+12.	盒子模型
+12.1.	border 边框
+border-width || border-style || border-color
+border-style
+none
+无
+hidden
+隐藏
+dotted
+点线
+dashed
+虚线
+solid
+实线
+连写：  border: 1px solid red;
+边框可拆
+border-top: 1px solid red;
+border-left: 1px solid red;
+合并相邻边框
+border-collapse：collapse；
+12.2.	padding  内边距
+padding: 10px;
+上下左右
+padding: 10px 20px; 
+上下 10  左右 20
+padding: 10px 20px 30px;
+上 10  左右 20  下 30
+padding ： 10px 20px 30px 40px;
+顺时针
+实际盒子大小 = width  +  padding  + border
+12.3.	margin 外边距
+auto
+自动充满
+盒子居中
+margin：0 auto；
+margin-left：auto;
+margin-right：auto;
+margin:auto;
+右对齐
+margin-left：auto;
+外边距垂直会合并
+嵌套元素块的垂直外边距合并
+解决方案
+可以为父元素定义1像素的上边框或上内边距
+可以为父元素添加overflow:hidden
+12.4.	内外边距置零
+*{
+margin：0；
+padding：0；
+}
+慢
+body, div, dl, dt, dd, ul, ol, li, h1, 
+h2, h3, h4, h5, h6, pre, form,fieldset, 
+input, p, blockquote, th, td { 
+    margin:0; 
+    padding:0; 
+}
+快
+12.5.	圆角边框
+border-radius:50%;
+12.6.	盒子阴影
+box-shadow: 
+水平阴影 垂直阴影 模糊距离（虚实）  阴影尺寸（影子大小）  阴影颜色  内/外阴影
+13.	文本样式
+13.1.	color
+十六进制
+#f00
+#000
+#fff
+预定义颜色
+RGB颜色
+rgb(x,x,x)，x∈[0，255]∨x∈[0,100%]
+13.2.	line-height 
+行高
+行与行之间的距离 
+单位一般用px
+13.3.	text-align
+文本水平居中对齐
+13.4.	text-indent
+段落首行缩进2个字    text-indent：2em；  1em就是一个字的距离
+13.5.	text-decoration
+通常给链接修改装饰效果
+none
+默认
+underline
+下划线
+overline
+上划线
+line-through
+贯穿线
+13.6.	vertical-align
+和行内块搭配 使用
+img  input
+img 图片 默认和 文字的 基线对齐 
+13.7.	行高问题
+四条线
+顶线
+中线
+基线
+底线
+
+ 
+14.	背景
+14.1.	背景颜色 
+14.2.	背景图片
+background-image: url();
+14.3.	背景位置
+background-position
+方位名词top  bottom left  right
+background-position: top center;  背景图片 水平居中 垂直上
+background-position: 20px 100px;  背景图片  水平20  垂直 100
+14.4.	背景平铺
+background-repeat
+no-repeat
+repeat-x
+repeat-y
+14.5.	背景滚动
+background-attachment
+scroll
+fixed
+14.6.	简写
+background属性的值的书写顺序官方并没有强制标准的。为了可读性，建议大家如下写：
+background: transparent url(image.jpg) repeat-y  scroll 50% 0 ;
+14.7.	CSS3支持背景半透明的写法语法格式是:
+background: rgba(0,0,0,0.3);
+最后一个参数是alpha 透明度  取值范围 0~1之间
+ 注意：  背景半透明是指盒子背景半透明， 盒子里面的内容不受影响
+15.	用户界面
+15.1.	cursor 鼠标样式
+default  小白 
+text  文本 
+move   移动
+pointer  小手
+15.2.	轮廓线  针对于表单
+outline：0  或者 none
+15.3.	防止文本域拖拽
+resize: none;
+16.	CSS精灵 (sprite)
+16.1.	为什么用精灵技术：为了减少去服务器的请求次数
+16.2.	怎么实现精灵技术： 把多个小背景图片放到一张大图上面
+16.3.	我们怎么使用精灵：  背景定位 background-position
+16.4.	一定学会用fw 去测量精灵图
+17.	溢出的部分显示省略号
+17.1.	1. 文字一行显示 不换行   white-space： nowrap
+17.2.	2. 溢出部分隐藏   overflow：hidden；
+17.3.	3. 超出的部分以省略号显示   text-overflow:ellipsis
